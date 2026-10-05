@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My AI Video Maker</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background: #f5f5f5;
+      color: #222;
+    }
+
+    .app {
+      max-width: 600px;
+      margin: auto;
+      background: white;
+      padding: 25px;
+      border-radius: 20px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    }
+
+    h1 {
+      text-align: center;
+    }
+
+    textarea {
+      width: 100%;
+      height: 150px;
+      padding: 15px;
+      box-sizing: border-box;
+      border: 1px solid #ccc;
+      border-radius: 12px;
+      font-size: 16px;
+      resize: vertical;
+    }
+
+    button {
+      width: 100%;
+      padding: 15px;
+      margin-top: 15px;
+      border: none;
+      border-radius: 12px;
+      background: #111;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    #scenes {
+      margin-top: 25px;
+    }
+
+    .scene {
+      padding: 15px;
+      margin-top: 10px;
+      background: #f0f0f0;
+      border-radius: 12px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="app">
+
+    <h1>🎬 My AI Video Maker</h1>
+
+    <p>Enter your story and turn it into video scenes.</p>
+
+    <textarea id="story" placeholder="Example: A little girl finds a tiny blue bird in a magical forest..."></textarea>
+
+    <button onclick="generateScenes()">Generate Scenes</button>
+
+    <div id="scenes"></div>
+
+  </div>
+
+  <script>
+    function generateScenes() {
+
+      const story = document.getElementById("story").value;
+      const scenes = document.getElementById("scenes");
+
+      if (!story.trim()) {
+        scenes.innerHTML = "<p>Please enter a story first.</p>";
+        return;
+      }
+
+      scenes.innerHTML = `
+        <h2>Your Story</h2>
+
+        <div class="scene">
+          <strong>Scene 1</strong>
+          <p>Opening scene based on your story.</p>
+        </div>
+
+        <div class="scene">
+          <strong>Scene 2</strong>
+          <p>Main character and location.</p>
+        </div>
+
+        <div class="scene">
+          <strong>Scene 3</strong>
+          <p>The main event begins.</p>
+        </div>
+
+        <div class="scene">
+          <strong>Scene 4</strong>
+          <p>The story reaches an important moment.</p>
+        </div>
+
+        <div class="scene">
+          <strong>Scene 5</strong>
+          <p>Ending scene.</p>
+        </div>
+      `;
+    }
+  </script>
+
+</body>
+</html>
