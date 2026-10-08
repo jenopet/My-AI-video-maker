@@ -1,125 +1,145 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>My AI Video Maker</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 20px;
-      background: #f5f5f5;
-      color: #222;
-    }
+<title>My AI Video Maker</title>
 
-    .app {
-      max-width: 600px;
-      margin: auto;
-      background: white;
-      padding: 25px;
-      border-radius: 20px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-    }
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background: #f5f5f5;
+  margin: 0;
+  padding: 20px;
+}
 
-    h1 {
-      text-align: center;
-    }
+.app {
+  max-width: 650px;
+  margin: auto;
+  background: white;
+  padding: 25px;
+  border-radius: 20px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+}
 
-    textarea {
-      width: 100%;
-      height: 150px;
-      padding: 15px;
-      box-sizing: border-box;
-      border: 1px solid #ccc;
-      border-radius: 12px;
-      font-size: 16px;
-      resize: vertical;
-    }
+h1 {
+  text-align: center;
+}
 
-    button {
-      width: 100%;
-      padding: 15px;
-      margin-top: 15px;
-      border: none;
-      border-radius: 12px;
-      background: #111;
-      color: white;
-      font-size: 16px;
-      cursor: pointer;
-    }
+textarea {
+  width: 100%;
+  height: 180px;
+  padding: 15px;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  font-size: 16px;
+}
 
-    #scenes {
-      margin-top: 25px;
-    }
+select, button {
+  width: 100%;
+  padding: 15px;
+  margin-top: 15px;
+  border-radius: 12px;
+  font-size: 16px;
+}
 
-    .scene {
-      padding: 15px;
-      margin-top: 10px;
-      background: #f0f0f0;
-      border-radius: 12px;
-    }
-  </style>
+button {
+  border: none;
+  background: #111;
+  color: white;
+  cursor: pointer;
+}
+
+.scene {
+  background: #f0f0f0;
+  padding: 15px;
+  margin-top: 12px;
+  border-radius: 12px;
+}
+
+.loading {
+  margin-top: 20px;
+  text-align: center;
+}
+</style>
 </head>
 
 <body>
 
-  <div class="app">
+<div class="app">
 
-    <h1>🎬 My AI Video Maker</h1>
+<h1>🎬 My AI Video Maker</h1>
 
-    <p>Enter your story and turn it into video scenes.</p>
+<p>Enter your story and choose the video length.</p>
 
-    <textarea id="story" placeholder="Example: A little girl finds a tiny blue bird in a magical forest..."></textarea>
+<textarea id="story"
+placeholder="Example: Mia finds a tiny blue bird in a magical forest..."></textarea>
 
-    <button onclick="generateScenes()">Generate Scenes</button>
+<select id="duration">
+<option value="1">1 minute</option>
+<option value="5">5 minutes</option>
+<option value="10">10 minutes</option>
+<option value="20">20 minutes</option>
+<option value="30">30 minutes</option>
+</select>
 
-    <div id="scenes"></div>
+<button onclick="createScenes()">Create Video Scenes</button>
 
-  </div>
+<div id="loading"></div>
 
-  <script>
-    function generateScenes() {
+<div id="scenes"></div>
 
-      const story = document.getElementById("story").value;
-      const scenes = document.getElementById("scenes");
+</div>
 
-      if (!story.trim()) {
-        scenes.innerHTML = "<p>Please enter a story first.</p>";
-        return;
-      }
+<script>
 
-      scenes.innerHTML = `
-        <h2>Your Story</h2>
+function createScenes() {
 
-        <div class="scene">
-          <strong>Scene 1</strong>
-          <p>Opening scene based on your story.</p>
-        </div>
+const story = document.getElementById("story").value;
+const duration = Number(document.getElementById("duration").value);
 
-        <div class="scene">
-          <strong>Scene 2</strong>
-          <p>Main character and location.</p>
-        </div>
+const scenes = document.getElementById("scenes");
+const loading = document.getElementById("loading");
 
-        <div class="scene">
-          <strong>Scene 3</strong>
-          <p>The main event begins.</p>
-        </div>
+if (!story.trim()) {
 
-        <div class="scene">
-          <strong>Scene 4</strong>
-          <p>The story reaches an important moment.</p>
-        </div>
+scenes.innerHTML = "<p>Please enter a story first.</p>";
+return;
 
-        <div class="scene">
-          <strong>Scene 5</strong>
-          <p>Ending scene.</p>
-        </div>
-      `;
-    }
-  </script>
+}
+
+loading.innerHTML = "⏳ Creating your story scenes...";
+
+scenes.innerHTML = "";
+
+let numberOfScenes = duration * 8;
+
+for (let i = 1; i <= numberOfScenes; i++) {
+
+const scene = document.createElement("div");
+
+scene.className = "scene";
+
+scene.innerHTML = `
+<strong>Scene ${i}</strong>
+<p>${story}</p>
+`;
+
+scenes.appendChild(scene);
+
+}
+
+loading.innerHTML =
+"✅ " + numberOfScenes +
+" scenes prepared for your " +
+duration +
+"-minute video.";
+
+}
+
+</script>
 
 </body>
 </html>
