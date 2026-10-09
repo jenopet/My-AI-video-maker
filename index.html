@@ -7,139 +7,1327 @@
 <title>My AI Video Maker</title>
 
 <style>
+:root {
+  --bg: #10101b;
+  --panel: #1c1c2d;
+  --panel2: #25253a;
+  --text: #f7f7ff;
+  --muted: #b7b7cc;
+  --accent: #a78bfa;
+  --accent2: #ec4899;
+  --border: #393950;
+}
+
+* { box-sizing: border-box; }
+
 body {
   font-family: Arial, sans-serif;
-  background: #f5f5f5;
+  background: var(--bg);
+  color: var(--text);
   margin: 0;
-  padding: 20px;
+  padding: 16px;
+  line-height: 1.5;
 }
 
 .app {
-  max-width: 650px;
+  max-width: 950px;
   margin: auto;
-  background: white;
-  padding: 25px;
-  border-radius: 20px;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
 }
 
-h1 {
+header {
   text-align: center;
+  padding: 24px 8px;
+}
+
+header h1 {
+  font-size: clamp(27px, 6vw, 40px);
+  margin: 0 0 8px;
+}
+
+header p {
+  color: var(--muted);
+  margin: 0;
+}
+
+.badge {
+  display: inline-block;
+  background: #30274c;
+  color: #d7c8ff;
+  border: 1px solid #65539a;
+  border-radius: 30px;
+  padding: 5px 12px;
+  font-size: 12px;
+  margin-bottom: 12px;
+}
+
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 18px;
+  margin-bottom: 18px;
+}
+
+h2 {
+  font-size: 20px;
+  margin: 0 0 16px;
+}
+
+h3 {
+  font-size: 16px;
+  margin-top: 0;
+}
+
+label {
+  display: block;
+  font-size: 13px;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+
+input, textarea, select {
+  display: block;
+  width: 100%;
+  background: #121222;
+  color: white;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  padding: 12px;
+  margin-bottom: 15px;
+  font: inherit;
 }
 
 textarea {
-  width: 100%;
-  height: 180px;
-  padding: 15px;
-  box-sizing: border-box;
-  border: 1px solid #ccc;
-  border-radius: 12px;
-  font-size: 16px;
+  resize: vertical;
+  min-height: 100px;
 }
 
-select, button {
-  width: 100%;
-  padding: 15px;
-  margin-top: 15px;
-  border-radius: 12px;
-  font-size: 16px;
+input:focus, textarea:focus, select:focus {
+  outline: 2px solid var(--accent);
+  border-color: transparent;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0 14px;
 }
 
 button {
-  border: none;
-  background: #111;
-  color: white;
+  border: 0;
+  border-radius: 10px;
+  padding: 12px 15px;
+  font-weight: bold;
+  font-size: 14px;
   cursor: pointer;
+  margin: 3px 3px 3px 0;
+}
+
+.primary {
+  background: linear-gradient(120deg, var(--accent), var(--accent2));
+  color: white;
+}
+
+.secondary {
+  background: var(--panel2);
+  color: white;
+  border: 1px solid var(--border);
+}
+
+.danger {
+  background: #582538;
+  color: white;
+}
+
+button:active { transform: scale(.98); }
+
+.full { width: 100%; }
+
+.help {
+  color: var(--muted);
+  font-size: 12px;
+  margin-top: -9px;
+  margin-bottom: 14px;
+}
+
+#status {
+  color: #c4b5fd;
+  font-size: 14px;
+  margin-top: 10px;
+  overflow-wrap: anywhere;
 }
 
 .scene {
-  background: #f0f0f0;
-  padding: 15px;
-  margin-top: 12px;
+  background: #171727;
+  border: 1px solid var(--border);
   border-radius: 12px;
+  padding: 15px;
+  margin: 12px 0;
 }
 
-.loading {
-  margin-top: 20px;
+.scene h3 { color: #d5c8ff; }
+
+.scene p {
+  font-size: 14px;
+  overflow-wrap: anywhere;
+}
+
+.scene strong { color: #f0abfc; }
+
+.scene textarea {
+  min-height: 65px;
+}
+
+.empty {
   text-align: center;
+  color: var(--muted);
+  padding: 25px 5px;
+}
+
+.small {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.stat {
+  background: var(--panel2);
+  padding: 12px 5px;
+  border-radius: 10px;
+  text-align: center;
+}
+
+.stat strong {
+  display: block;
+  font-size: 22px;
+}
+
+.stat span {
+  color: var(--muted);
+  font-size: 11px;
+}
+
+footer {
+  text-align: center;
+  padding: 20px 5px;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+@media (max-width: 520px) {
+  body { padding: 10px; }
+  .grid { grid-template-columns: 1fr; }
+  .panel { padding: 14px; }
+  .stats { gap: 5px; }
 }
 </style>
 </head>
 
 <body>
-
 <div class="app">
 
-<h1>🎬 My AI Video Maker</h1>
+<header>
+  <span class="badge">YOUR PERSONAL CREATIVE STUDIO</span>
+  <h1>🎬 My AI Video Maker</h1>
+  <p>Dream up a story. Build a world. Create something unforgettable.</p>
+</header>
 
-<p>Enter your story and choose the video length.</p>
+<section class="panel">
+  <h2>✍️ 1. Your Story</h2>
 
-<textarea id="story"
-placeholder="Example: Mia finds a tiny blue bird in a magical forest..."></textarea>
+  <label for="idea">What is your video about?</label>
+  <textarea id="idea" placeholder="Example: Mia discovers a magical blue bird that can grant wishes, but one wish goes hilariously wrong..."></textarea>
 
-<select id="duration">
-<option value="1">1 minute</option>
-<option value="5">5 minutes</option>
-<option value="10">10 minutes</option>
-<option value="20">20 minutes</option>
-<option value="30">30 minutes</option>
-</select>
+  <label for="title">Story title</label>
+  <input id="title" placeholder="My Magical Adventure">
 
-<button onclick="createScenes()">Create Video Scenes</button>
+  <div class="grid">
+    <div>
+      <label for="genre">Content type</label>
+      <select id="genre">
+        <option>Children's Story</option>
+        <option>Funny Story</option>
+        <option>Fantasy Adventure</option>
+        <option>Animal Story</option>
+        <option>Mystery</option>
+        <option>Moral Story</option>
+        <option>Bedtime Story</option>
+        <option>Educational</option>
+        <option>Fairy Tale</option>
+        <option>Family Comedy</option>
+        <option>Science Fiction</option>
+        <option>Custom Story</option>
+      </select>
+    </div>
 
-<div id="loading"></div>
+    <div>
+      <label for="age">Target audience</label>
+      <select id="age">
+        <option>2–4 years</option>
+        <option selected>5–7 years</option>
+        <option>8–10 years</option>
+        <option>11–13 years</option>
+        <option>Family audience</option>
+        <option>General audience</option>
+      </select>
+    </div>
 
-<div id="scenes"></div>
+    <div>
+      <label for="length">Video length</label>
+      <select id="length">
+        <option value="30">30 seconds</option>
+        <option value="60">1 minute</option>
+        <option value="120" selected>2 minutes</option>
+        <option value="300">5 minutes</option>
+        <option value="600">10 minutes</option>
+        <option value="1200">20 minutes</option>
+        <option value="1800">30 minutes</option>
+        <option value="3600">1 hour</option>
+        <option value="custom">Custom length</option>
+      </select>
+    </div>
+
+    <div>
+      <label for="customLength">Custom length in minutes</label>
+      <input id="customLength" type="number" min="0.5" max="240" value="3">
+    </div>
+
+    <div>
+      <label for="sceneLength">Approximate scene duration</label>
+      <select id="sceneLength">
+        <option value="3">3 seconds — very fast</option>
+        <option value="5" selected>5 seconds — fast</option>
+        <option value="8">8 seconds — balanced</option>
+        <option value="10">10 seconds — relaxed</option>
+        <option value="15">15 seconds — detailed</option>
+      </select>
+    </div>
+
+    <div>
+      <label for="hook">Opening hook</label>
+      <select id="hook">
+        <option>Normal</option>
+        <option>Strong</option>
+        <option selected>Very Strong</option>
+        <option>Unexpected and Mysterious</option>
+        <option>Funny and Surprising</option>
+      </select>
+    </div>
+  </div>
+</section>
+
+<section class="panel">
+  <h2>🎭 2. Creativity Controls</h2>
+
+  <div class="grid">
+    <div>
+      <label for="style">Visual style</label>
+      <select id="style">
+        <option>3D Cartoon</option>
+        <option>2D Cartoon</option>
+        <option>Anime</option>
+        <option>Storybook Illustration</option>
+        <option>Clay Animation</option>
+        <option>Realistic Cinematic</option>
+        <option>Fantasy Animation</option>
+      </select>
+    </div>
+
+    <div>
+      <label for="mood">Story mood</label>
+      <select id="mood">
+        <option>Funny</option>
+        <option>Magical</option>
+        <option>Adventure</option>
+        <option>Emotional</option>
+        <option>Mystery</option>
+        <option>Inspirational</option>
+        <option selected>Mixed</option>
+      </select>
+    </div>
+
+    <div>
+      <label for="funny">Funny moments 😂</label>
+      <select id="funny">
+        <option>Off</option>
+        <option>Low</option>
+        <option>Medium</option>
+        <option selected>High</option>
+        <option>Wild and Unexpected</option>
+      </select>
+    </div>
+
+    <div>
+      <label for="magic">Magic and fantasy ✨</label>
+      <select id="magic">
+        <option>Off</option>
+        <option>Low</option>
+        <option>Medium</option>
+        <option selected>High</option>
+        <option>Wild Magic</option>
+      </select>
+    </div>
+
+    <div>
+      <label for="dialogue">Character dialogue</label>
+      <select id="dialogue">
+        <option>Off</option>
+        <option>Occasional</option>
+        <option selected>Frequent</option>
+        <option>Dialogue-Heavy</option>
+      </select>
+    </div>
+
+    <div>
+      <label for="surprise">Surprises and plot twists</label>
+      <select id="surprise">
+        <option>Low</option>
+        <option>Medium</option>
+        <option selected>High</option>
+        <option>Constant Twists</option>
+      </select>
+    </div>
+
+    <div>
+      <label for="action">Action intensity</label>
+      <select id="action">
+        <option>Low</option>
+        <option selected>Medium</option>
+        <option>High</option>
+      </select>
+    </div>
+
+    <div>
+      <label for="emotion">Emotional moments</label>
+      <select id="emotion">
+        <option>Low</option>
+        <option selected>Medium</option>
+        <option>High</option>
+        <option>Random</option>
+      </select>
+    </div>
+
+    <div>
+      <label for="variety">Scene variety</label>
+      <select id="variety">
+        <option>Normal</option>
+        <option>High</option>
+        <option selected>Maximum Variety</option>
+      </select>
+    </div>
+
+    <div>
+      <label for="creativity">Random creativity</label>
+      <select id="creativity">
+        <option>Low</option>
+        <option>Medium</option>
+        <option>High</option>
+        <option selected>Wild and Unexpected</option>
+      </select>
+    </div>
+
+    <div>
+      <label for="ending">Ending style</label>
+      <select id="ending">
+        <option>Happy</option>
+        <option>Funny</option>
+        <option>Emotional</option>
+        <option>Surprising</option>
+        <option>Moral Lesson</option>
+        <option>Cliffhanger</option>
+        <option selected>Automatic</option>
+      </select>
+    </div>
+
+    <div>
+      <label for="lesson">Story lesson</label>
+      <select id="lesson">
+        <option>None</option>
+        <option>Kindness</option>
+        <option>Friendship</option>
+        <option>Courage</option>
+        <option>Honesty</option>
+        <option>Teamwork</option>
+        <option>Never Give Up</option>
+        <option>Respect for Animals</option>
+        <option>Custom Lesson</option>
+      </select>
+    </div>
+  </div>
+</section>
+
+<section class="panel">
+  <h2>🧒 3. Characters and Voices</h2>
+
+  <div class="grid">
+    <div>
+      <label for="characters">Number of characters</label>
+      <select id="characters">
+        <option>1</option>
+        <option selected>2</option>
+        <option>3</option>
+        <option>4</option>
+        <option>5</option>
+        <option>Custom</option>
+      </select>
+    </div>
+
+    <div>
+      <label for="consistency">Character consistency</label>
+      <select id="consistency">
+        <option>Normal</option>
+        <option>Strong</option>
+        <option selected>Strict</option>
+      </select>
+    </div>
+
+    <div>
+      <label for="characterName">Main character's name</label>
+      <input id="characterName" value="Mia">
+    </div>
+
+    <div>
+      <label for="characterDescription">Main character's appearance</label>
+      <input id="characterDescription" value="7-year-old dark-skinned girl, two puff ponytails, yellow dress, red shoes, blue backpack">
+    </div>
+
+    <div>
+      <label for="voice">Voice arrangement</label>
+      <select id="voice">
+        <option>Narrator Only</option>
+        <option>Characters Only</option>
+        <option selected>Narrator + Characters</option>
+      </select>
+    </div>
+
+    <div>
+      <label for="voiceType">Narrator voice style</label>
+      <select id="voiceType">
+        <option>Warm Female</option>
+        <option>Warm Male</option>
+        <option>Childlike</option>
+        <option>Storyteller</option>
+        <option>Energetic</option>
+        <option>Calm Bedtime</option>
+      </select>
+    </div>
+
+    <div>
+      <label for="music">Background music</label>
+      <select id="music">
+        <option>None</option>
+        <option>Happy</option>
+        <option>Magical</option>
+        <option>Funny</option>
+        <option>Adventure</option>
+        <option>Emotional</option>
+        <option selected>Automatic</option>
+      </select>
+    </div>
+
+    <div>
+      <label for="sfx">Sound effects</label>
+      <select id="sfx">
+        <option>None</option>
+        <option>Low</option>
+        <option>Medium</option>
+        <option>High</option>
+        <option selected>Automatic</option>
+      </select>
+    </div>
+  </div>
+</section>
+
+<section class="panel">
+  <h2>📱 4. Video Settings</h2>
+
+  <div class="grid">
+    <div>
+      <label for="platform">Target platform</label>
+      <select id="platform">
+        <option>YouTube Shorts</option>
+        <option>YouTube</option>
+        <option>TikTok</option>
+        <option>Facebook Reels</option>
+        <option>Instagram Reels</option>
+        <option>Multiple Platforms</option>
+      </select>
+    </div>
+
+    <div>
+      <label for="ratio">Video shape</label>
+      <select id="ratio">
+        <option value="9:16">9:16 Vertical</option>
+        <option value="16:9">16:9 Landscape</option>
+        <option value="1:1">1:1 Square</option>
+      </select>
+    </div>
+
+    <div>
+      <label for="camera">Camera direction</label>
+      <select id="camera">
+        <option>Normal</option>
+        <option>Cinematic</option>
+        <option>Dynamic</option>
+        <option>Fast-Paced</option>
+        <option>Children's Cartoon</option>
+      </select>
+    </div>
+
+    <div>
+      <label for="quality">Planning mode</label>
+      <select id="quality">
+        <option>Quick</option>
+        <option selected>Detailed</option>
+        <option>Maximum Detail</option>
+      </select>
+    </div>
+  </div>
+
+  <p class="help">
+    These settings guide your scene plans. They do not yet render a finished video.
+  </p>
+</section>
+
+<section class="panel">
+  <h2>🚀 5. Create Your Story</h2>
+
+  <button class="primary full" id="generate">✨ GENERATE STORY SCENES</button>
+  <button class="secondary full" id="save">💾 SAVE PROJECT SETTINGS</button>
+  <button class="secondary full" id="load">📂 LOAD SAVED SETTINGS</button>
+
+  <div id="status" role="status" aria-live="polite"></div>
+</section>
+
+<section class="panel">
+  <h2>🎞️ 6. Your Scene Plan</h2>
+
+  <div class="stats">
+    <div class="stat">
+      <strong id="sceneCount">0</strong>
+      <span>SCENES</span>
+    </div>
+    <div class="stat">
+      <strong id="durationCount">0s</strong>
+      <span>PLANNED LENGTH</span>
+    </div>
+    <div class="stat">
+      <strong id="dialogueCount">0</strong>
+      <span>DIALOGUE SCENES</span>
+    </div>
+  </div>
+
+  <button class="secondary" id="copy">📋 COPY SCENES</button>
+  <button class="secondary" id="download">⬇️ DOWNLOAD SCENES</button>
+  <button class="secondary" id="downloadJson">📦 EXPORT PROJECT JSON</button>
+
+  <div id="scenes" class="empty">
+    Your generated scenes will appear here.
+  </div>
+</section>
+
+<footer>
+  My AI Video Maker · Your creativity, your stories, your studio.
+  <br>Scene planning works locally. AI image generation, voice generation,
+  and final video rendering are not connected yet.
+</footer>
 
 </div>
 
 <script>
+(function () {
+  "use strict";
 
-function createScenes() {
+  const $ = id => document.getElementById(id);
+  let currentScenes = [];
+  let currentProject = null;
 
-const story = document.getElementById("story").value;
-const duration = Number(document.getElementById("duration").value);
+  const fields = [
+    "idea", "title", "genre", "age", "length", "customLength",
+    "sceneLength", "hook", "style", "mood", "funny", "magic",
+    "dialogue", "surprise", "action", "emotion", "variety",
+    "creativity", "ending", "lesson", "characters", "consistency",
+    "characterName", "characterDescription", "voice", "voiceType",
+    "music", "sfx", "platform", "ratio", "camera", "quality"
+  ];
 
-const scenes = document.getElementById("scenes");
-const loading = document.getElementById("loading");
+  function getSettings() {
+    const settings = {};
+    fields.forEach(id => settings[id] = $(id).value);
+    return settings;
+  }
 
-if (!story.trim()) {
+  function getDuration(s) {
+    if (s.length === "custom") {
+      const minutes = Number(s.customLength);
+      if (!Number.isFinite(minutes) || minutes < 0.5 || minutes > 240) {
+        throw new Error("Choose a custom length between 0.5 and 240 minutes.");
+      }
+      return Math.round(minutes * 60);
+    }
+    return Number(s.length);
+  }
 
-scenes.innerHTML = "<p>Please enter a story first.</p>";
-return;
+  function pick(list, index) {
+    return list[index % list.length];
+  }
 
-}
+  function shuffleCopy(list) {
+    const result = [...list];
+    for (let i = result.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [result[i], result[j]] = [result[j], result[i]];
+    }
+    return result;
+  }
 
-loading.innerHTML = "⏳ Creating your story scenes...";
+  function makePlan(s) {
+    const idea = s.idea.trim();
+    if (!idea) {
+      throw new Error("Please enter a story idea first.");
+    }
 
-scenes.innerHTML = "";
+    const totalSeconds = getDuration(s);
+    const sceneSeconds = Number(s.sceneLength);
+    const count = Math.ceil(totalSeconds / sceneSeconds);
 
-let numberOfScenes = duration * 8;
+    // Safety limit protects the browser from extremely large projects.
+    if (count > 5000) {
+      throw new Error("This project needs more than 5,000 scenes. Choose a shorter duration or longer scene duration.");
+    }
 
-for (let i = 1; i <= numberOfScenes; i++) {
+    const main = s.characterName.trim() || "Main Character";
+    const appearance = s.characterDescription.trim() ||
+      "consistent appearance as described by the creator";
 
-const scene = document.createElement("div");
+    const hookOptions = [
+      "Something impossible suddenly happens, raising an immediate question.",
+      "A mysterious sound interrupts the scene. The source is not revealed yet.",
+      "An unexpected character appears in a surprising place.",
+      "A strange object begins glowing and behaves in an impossible way.",
+      "A funny disaster starts before the character understands what is happening."
+    ];
 
-scene.className = "scene";
+    const funnyOptions = [
+      "A nearby animal makes an exaggerated expression at exactly the wrong moment.",
+      "A tiny character acts extremely confident and immediately gets surprised.",
+      "An unexpected sound makes everyone turn around at once.",
+      "A character misunderstands a simple instruction in a harmless, funny way.",
+      "A silly creature attempts an impressive trick that goes hilariously wrong.",
+      "A butterfly lands on the main character's nose at a dramatic moment."
+    ];
 
-scene.innerHTML = `
-<strong>Scene ${i}</strong>
-<p>${story}</p>
-`;
+    const magicOptions = [
+      "Glowing particles swirl around a mysterious object.",
+      "A nearby tree comes alive and reacts to the characters.",
+      "A magical doorway appears between two ancient trees.",
+      "The landscape transforms into a beautiful, glowing fantasy world.",
+      "A tiny creature reveals a surprising magical ability.",
+      "A trail of sparkling light leads toward an unknown destination."
+    ];
 
-scenes.appendChild(scene);
+    const mysteryOptions = [
+      "A strange clue appears in the background.",
+      "A mysterious shadow moves where nobody is standing.",
+      "An unexplained sound comes from just beyond the camera.",
+      "A familiar object suddenly disappears.",
+      "A secret symbol begins glowing on a nearby surface."
+    ];
 
-}
+    const actionOptions = [
+      "The characters hurry toward a safe place as the environment changes.",
+      "A playful chase begins around trees and colorful obstacles.",
+      "The character leaps across a small obstacle in a dynamic shot.",
+      "A sudden gust sends harmless objects swirling through the air.",
+      "The characters work together to reach a difficult-to-access place."
+    ];
 
-loading.innerHTML =
-"✅ " + numberOfScenes +
-" scenes prepared for your " +
-duration +
-"-minute video.";
+    const emotionOptions = [
+      "The main character pauses and shows genuine concern for a friend.",
+      "A character offers comfort to someone who feels frightened.",
+      "A moment of kindness changes the mood of the scene.",
+      "The characters share a moment of relief after a difficult challenge."
+    ];
 
-}
+    const opening = s.hook === "Normal"
+      ? "Introduce the main character and the central situation."
+      : pick(hookOptions, Math.floor(Math.random() * hookOptions.length));
 
+    const beats = [
+      {
+        name: "Opening Hook",
+        description: opening,
+        type: "HOOK"
+      },
+      {
+        name: "Discover the World",
+        description: "Establish the setting, atmosphere and what makes this world interesting.",
+        type: "DISCOVERY"
+      },
+      {
+        name: "Meet the Characters",
+        description: "Show the main character's personality, appearance and immediate goal.",
+        type: "CHARACTER"
+      },
+      {
+        name: "First Clue",
+        description: "Introduce a clue that connects to the story idea.",
+        type: "MYSTERY"
+      },
+      {
+        name: "First Interaction",
+        description: "The characters react to one another and begin communicating.",
+        type: "DIALOGUE"
+      },
+      {
+        name: "Funny Surprise",
+        description: "A funny and unexpected event surprises the characters.",
+        type: "FUNNY"
+      },
+      {
+        name: "The Problem",
+        description: "Introduce an obstacle that makes the character's goal harder.",
+        type: "PROBLEM"
+      },
+      {
+        name: "Magical Discovery",
+        description: "A magical object or creature appears unexpectedly.",
+        type: "MAGIC"
+      },
+      {
+        name: "A New Challenge",
+        description: "The characters face a new challenge and must act quickly.",
+        type: "ACTION"
+      },
+      {
+        name: "Heartfelt Moment",
+        description: "A character comforts a friend or shows kindness.",
+        type: "EMOTION"
+      },
+      {
+        name: "Unexpected Twist",
+        description: "A mysterious clue changes what the characters believe.",
+        type: "TWIST"
+      },
+      {
+        name: "Teamwork",
+        description: "The characters combine their strengths to make progress.",
+        type: "TEAMWORK"
+      },
+      {
+        name: "The Big Challenge",
+        description: "Bring the central conflict to its most exciting point.",
+        type: "CLIMAX"
+      },
+      {
+        name: "Resolution",
+        description: "Resolve the central problem and show the consequences.",
+        type: "RESOLUTION"
+      },
+      {
+        name: "Final Surprise",
+        description: "Reveal one last funny or magical detail.",
+        type: "SURPRISE"
+      },
+      {
+        name: "Ending",
+        description: "Finish with a satisfying conclusion connected to the opening.",
+        type: "ENDING"
+      }
+    ];
+
+    let candidates = [];
+
+    candidates.push(
+      beats[0],
+      beats[1],
+      beats[2],
+      beats[6],
+      beats[12],
+      beats[13],
+      beats[15]
+    );
+
+    if (s.dialogue !== "Off") {
+      candidates.push(beats[4]);
+      candidates.push({
+        name: "Character Conversation",
+        description: "One character asks a question and another responds naturally.",
+        type: "DIALOGUE"
+      });
+    }
+
+    if (s.funny !== "Off") {
+      const funnyCount =
+        s.funny === "Low" ? 1 :
+        s.funny === "Medium" ? 2 :
+        s.funny === "High" ? 4 : 6;
+
+      for (let i = 0; i < funnyCount; i++) {
+        candidates.push({
+          name: "Random Funny Moment",
+          description: pick(funnyOptions, i),
+          type: "FUNNY"
+        });
+      }
+    }
+
+    if (s.magic !== "Off") {
+      const magicCount =
+        s.magic === "Low" ? 1 :
+        s.magic === "Medium" ? 2 :
+        s.magic === "High" ? 4 : 6;
+
+      for (let i = 0; i < magicCount; i++) {
+        candidates.push({
+          name: "Magical Event",
+          description: pick(magicOptions, i),
+          type: "MAGIC"
+        });
+      }
+    }
+
+    if (s.surprise !== "Low") {
+      const twistCount =
+        s.surprise === "Medium" ? 1 :
+        s.surprise === "High" ? 3 : 5;
+
+      for (let i = 0; i < twistCount; i++) {
+        candidates.push({
+          name: "Unexpected Twist",
+          description: pick(mysteryOptions, i),
+          type: "TWIST"
+        });
+      }
+    }
+
+    if (s.action !== "Low") {
+      candidates.push(beats[8]);
+
+      if (s.action === "High") {
+        candidates.push({
+          name: "Action Escalation",
+          description: pick(actionOptions, 2),
+          type: "ACTION"
+        });
+      }
+    }
+
+    if (s.emotion !== "Low") {
+      candidates.push(beats[9]);
+
+      if (s.emotion === "High" || s.emotion === "Random") {
+        candidates.push({
+          name: "Emotional Connection",
+          description: pick(emotionOptions, 2),
+          type: "EMOTION"
+        });
+      }
+    }
+
+    if (s.lesson !== "None") {
+      candidates.push({
+        name: "Story Lesson",
+        description: "Show the importance of " + s.lesson +
+          " through the characters' actions.",
+        type: "LESSON"
+      });
+    }
+
+    if (s.variety === "Maximum Variety") {
+      candidates.push({
+        name: "Unexpected Discovery",
+        description: "Introduce a visually surprising discovery that fits the story.",
+        type: "DISCOVERY"
+      });
+  } const start = candidates.find(x => x.type === "HOOK");
+    const endingBeat = candidates.find(x => x.type === "ENDING");
+
+    let middle = candidates.filter(x =>
+      x.type !== "HOOK" &&
+      x.type !== "ENDING" &&
+      x.type !== "RESOLUTION" &&
+      x.type !== "CLIMAX"
+    );
+
+    if (s.creativity === "Wild and Unexpected") {
+      middle = shuffleCopy(middle);
+    }
+
+    let ordered = [start, ...middle];
+
+    if (s.ending === "Cliffhanger") {
+      ordered.push({
+        name: "Cliffhanger",
+        description: "Reveal a new mystery that makes viewers curious about what happens next.",
+        type: "CLIFFHANGER"
+      });
+    }
+
+    ordered.push(
+      beats[12],
+      beats[13],
+      endingBeat
+    );
+
+    ordered = ordered.filter(Boolean);
+
+    const scenes = [];
+
+    for (let i = 0; i < count; i++) {
+      let beat;
+
+      if (count === 1) {
+        beat = ordered[0];
+      } else {
+        const position = Math.floor(
+          i * (ordered.length - 1) / (count - 1)
+        );
+        beat = ordered[position];
+      }
+
+      const duration =
+        i === count - 1
+          ? totalSeconds - sceneSeconds * (count - 1)
+          : sceneSeconds;
+
+      const prompt =
+        "Create a " + s.style +
+        " image for a " + s.age +
+        " audience. Main character: " + main +
+        ". Appearance: " + appearance +
+        ". Story idea: " + idea +
+        ". Scene " + (i + 1) + ": " + beat.description +
+        ". Mood: " + s.mood +
+        ". Camera: " + s.camera +
+        ". Keep the character's face, hair, clothing, proportions and colors consistent. " +
+        "Use clear visual storytelling and expressive poses. " +
+        "Aspect ratio: " + s.ratio +
+        ". No captions, logos or watermarks.";
+
+      let dialogueText = "No dialogue assigned.";
+
+      if (
+        s.dialogue !== "Off" &&
+        ["DIALOGUE", "FUNNY", "EMOTION", "MAGIC"].includes(beat.type)
+      ) {
+        dialogueText =
+          main + ': "What do you think is happening?"\n' +
+          "Other character: Responds naturally to the situation.";
+      }
+
+      scenes.push({
+        number: i + 1,
+        title: beat.name,
+        type: beat.type,
+        duration: duration,
+        description: beat.description,
+        imagePrompt: prompt,
+        dialogue: dialogueText,
+        narration: "Describe what happens and connect it to the previous scene.",
+        camera: s.camera,
+        music: s.music,
+        soundEffects: s.sfx,
+        continuity: i === 0
+          ? "Establish the world and character appearance."
+          : "Continue from Scene " + i +
+            ". Maintain character appearance and story continuity."
+      });
+    }
+
+    return {
+      title: s.title.trim() || "My AI Story",
+      idea: idea,
+      settings: s,
+      durationSeconds: totalSeconds,
+      sceneCount: scenes.length,
+      scenes: scenes,
+      createdAt: new Date().toISOString(),
+      note: "This is a scene plan, not a rendered video."
+    };
+  }
+
+  function escapeHtml(value) {
+    return String(value).replace(/[&<>"']/g, char => ({
+      "&": "&amp;",
+      "<": "&lt;",
+      ">": "&gt;",
+      '"': "&quot;",
+      "'": "&#39;"
+    })[char]);
+  }
+
+  function renderScenes(project) {
+    const root = $("scenes");
+    root.innerHTML = "";
+    root.className = "";
+
+    project.scenes.forEach((scene, index) => {
+      const card = document.createElement("article");
+      card.className = "scene";
+
+      card.innerHTML = `
+        <h3>🎬 Scene ${scene.number}: ${escapeHtml(scene.title)}</h3>
+        <p><strong>Type:</strong> ${escapeHtml(scene.type)}</p>
+        <p><strong>Duration:</strong> ${scene.duration} seconds</p>
+
+        <label>Scene description</label>
+        <textarea data-index="${index}" data-field="description">${escapeHtml(scene.description)}</textarea>
+
+        <label>Image prompt</label>
+        <textarea data-index="${index}" data-field="imagePrompt">${escapeHtml(scene.imagePrompt)}</textarea>
+
+        <label>Dialogue</label>
+        <textarea data-index="${index}" data-field="dialogue">${escapeHtml(scene.dialogue)}</textarea>
+
+        <label>Narration</label>
+        <textarea data-index="${index}" data-field="narration">${escapeHtml(scene.narration)}</textarea>
+
+        <button class="secondary" data-regenerate="${index}">
+          🎲 Change Scene Idea
+        </button>
+      `;
+
+      root.appendChild(card);
+    });
+
+    root.querySelectorAll("textarea[data-index]").forEach(area => {
+      area.addEventListener("input", () => {
+        const index = Number(area.dataset.index);
+        const field = area.dataset.field;
+
+        if (currentScenes[index]) {
+          currentScenes[index][field] = area.value;
+        }
+      });
+    });
+
+    root.querySelectorAll("button[data-regenerate]").forEach(button => {
+      button.addEventListener("click", () => {
+        const index = Number(button.dataset.regenerate);
+
+        const options = [
+          "A silly animal interrupts the action with a surprising reaction.",
+          "A mysterious glowing object appears nearby.",
+          "The characters discover an unexpected clue.",
+          "A character makes a funny mistake.",
+          "A magical creature appears with an unusual challenge.",
+          "A surprising sound makes everyone look in the wrong direction."
+        ];
+
+        currentScenes[index].description =
+          pick(options, Math.floor(Math.random() * options.length));
+
+        currentScenes[index].imagePrompt =
+          "Create a " + currentProject.settings.style +
+          " image featuring " + currentProject.settings.characterName +
+          ". Appearance: " +
+          currentProject.settings.characterDescription +
+          ". Scene action: " +
+          currentScenes[index].description +
+          ". Maintain character consistency.";
+
+        renderScenes(currentProject);
+
+        $("status").textContent =
+          "Scene " + (index + 1) + " has a new idea.";
+      });
+    });
+  }
+  function downloadFile(filename, content, type) {
+    const blob = new Blob([content], { type: type });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+
+    link.href = url;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  }
+
+  function plainText(project) {
+    return project.title + "\n\n" +
+      "Story idea: " + project.idea + "\n" +
+      "Planned duration: " + project.durationSeconds + " seconds\n" +
+      "Scene count: " + project.sceneCount + "\n\n" +
+      project.scenes.map(scene =>
+        "SCENE " + scene.number + ": " + scene.title +
+        "\nType: " + scene.type +
+        "\nDuration: " + scene.duration + " seconds" +
+        "\nDescription: " + scene.description +
+        "\nImage prompt: " + scene.imagePrompt +
+        "\nDialogue: " + scene.dialogue +
+        "\nNarration: " + scene.narration +
+        "\nContinuity: " + scene.continuity
+      ).join("\n\n-------------------------\n\n");
+  }
+
+  $("generate").addEventListener("click", () => {
+    try {
+      $("status").textContent = "Planning your scenes...";
+
+      currentProject = makePlan(getSettings());
+      currentScenes = currentProject.scenes;
+
+      $("sceneCount").textContent = currentProject.sceneCount;
+
+      const seconds = currentProject.durationSeconds;
+
+      $("durationCount").textContent =
+        seconds >= 60
+          ? Math.floor(seconds / 60) + "m " +
+            seconds % 60 + "s"
+          : seconds + "s";
+
+      $("dialogueCount").textContent =
+        currentScenes.filter(scene =>
+          scene.dialogue !== "No dialogue assigned."
+        ).length;
+
+      renderScenes(currentProject);
+
+      $("status").textContent =
+        "Success! " + currentProject.sceneCount +
+        " scenes created. Review your scene plan below.";
+
+      $("scenes").scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+      });
+
+    } catch (error) {
+      $("status").textContent = error.message;
+    }
+  });
+
+  $("save").addEventListener("click", () => {
+    try {
+      localStorage.setItem(
+        "myVideoMakerSettings",
+        JSON.stringify(getSettings())
+      );
+
+      if (currentProject) {
+        localStorage.setItem(
+          "myVideoMakerProject",
+          JSON.stringify(currentProject)
+        );
+      }
+
+      $("status").textContent =
+        "Your settings have been saved on this device.";
+
+    } catch (error) {
+      $("status").textContent =
+        "Unable to save. Browser storage may be unavailable.";
+    }
+  });
+
+  $("load").addEventListener("click", () => {
+    try {
+      const saved = localStorage.getItem("myVideoMakerSettings");
+
+      if (!saved) {
+        $("status").textContent =
+          "No saved settings found on this device yet.";
+        return;
+      }
+
+      const settings = JSON.parse(saved);
+
+      fields.forEach(id => {
+        if (Object.prototype.hasOwnProperty.call(settings, id)) {
+          $(id).value = settings[id];
+        }
+      });
+
+      const savedProject =
+        localStorage.getItem("myVideoMakerProject");
+
+      if (savedProject) {
+        currentProject = JSON.parse(savedProject);
+        currentScenes = currentProject.scenes || [];
+
+        $("sceneCount").textContent = currentScenes.length;
+        $("durationCount").textContent =
+          (currentProject.durationSeconds || 0) + "s";
+
+        $("dialogueCount").textContent =
+          currentScenes.filter(scene =>
+            scene.dialogue !== "No dialogue assigned."
+          ).length;
+
+        renderScenes(currentProject);
+      }
+
+      $("status").textContent = "Saved settings loaded.";
+
+    } catch (error) {
+      $("status").textContent = "Unable to load saved settings.";
+    }
+  });
+
+  $("copy").addEventListener("click", async () => {
+    if (!currentProject) {
+      $("status").textContent = "Generate scenes first.";
+      return;
+    }
+
+    try {
+      await navigator.clipboard.writeText(
+        plainText(currentProject)
+      );
+
+      $("status").textContent = "Scenes copied successfully.";
+
+    } catch (error) {
+      $("status").textContent =
+        "Clipboard unavailable. Please use Download Scenes.";
+    }
+  });
+
+  $("download").addEventListener("click", () => {
+    if (!currentProject) {
+      $("status").textContent = "Generate scenes first.";
+      return;
+    }
+
+    downloadFile(
+      "my-ai-video-scenes.txt",
+      plainText(currentProject),
+      "text/plain;charset=utf-8"
+    );
+
+    $("status").textContent = "Scene plan downloaded.";
+  });
+
+  $("downloadJson").addEventListener("click", () => {
+    if (!currentProject) {
+      $("status").textContent = "Generate scenes first.";
+      return;
+    }
+
+    downloadFile(
+      "my-ai-video-project.json",
+      JSON.stringify(currentProject, null, 2),
+      "application/json"
+    );
+
+    $("status").textContent = "Project JSON downloaded.";
+  });
+
+})();
 </script>
 
 </body>
 </html>
+  
