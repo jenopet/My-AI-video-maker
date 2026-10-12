@@ -226,10 +226,140 @@ footer {
   .panel { padding: 14px; }
   .stats { gap: 5px; }
 }
+  /* SIDEBAR NAVIGATION */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 260px;
+  height: 100vh;
+  background: #171726;
+  border-right: 1px solid var(--border);
+  padding: 20px 14px;
+  overflow-y: auto;
+  z-index: 1000;
+  transition: transform 0.3s ease;
+}
+
+.sidebar h2 {
+  font-size: 20px;
+  color: var(--accent);
+  margin: 10px 8px 25px;
+}
+
+.sidebar-section {
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: bold;
+  margin: 22px 10px 8px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.sidebar button {
+  display: block;
+  width: 100%;
+  padding: 12px;
+  margin: 4px 0;
+  text-align: left;
+  background: transparent;
+  color: var(--text);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.sidebar button:hover,
+.sidebar button.active {
+  background: var(--panel2);
+  color: var(--accent);
+}
+
+.sidebar-toggle {
+  display: none;
+  position: fixed;
+  top: 12px;
+  left: 12px;
+  z-index: 1100;
+  background: var(--panel2);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.sidebar-backdrop {
+  display: none;
+}
+
+@media (min-width: 900px) {
+  body {
+    padding-left: 280px;
+  }
+
+  .app {
+    max-width: 1100px;
+  }
+}
+
+@media (max-width: 899px) {
+  .sidebar {
+    transform: translateX(-100%);
+  }
+
+  body.sidebar-open .sidebar {
+    transform: translateX(0);
+  }
+
+  .sidebar-toggle {
+    display: block;
+  }
+
+  .sidebar-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 900;
+  }
+
+  body.sidebar-open .sidebar-backdrop {
+    display: block;
+  }
+}
 </style>
 </head>
 
 <body>
+  <!-- SIDEBAR MENU -->
+<button class="sidebar-toggle" id="sidebarToggle" aria-label="Open menu">☰</button>
+
+<div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+
+<nav class="sidebar" id="sidebar">
+  <h2>🎬 My AI Video Maker</h2>
+
+  <div class="sidebar-section">WORKSPACE</div>
+  <button class="active" data-section="home">🏠 Home</button>
+  <button data-section="story">✍️ Story Generator</button>
+  <button data-section="characters">👧 Character Creator</button>
+  <button data-section="visuals">🎨 Visual Styles</button>
+
+  <div class="sidebar-section">VIDEO TOOLS</div>
+  <button data-section="funny">😂 Funny Scenes</button>
+  <button data-section="magic">✨ Magic & Fantasy</button>
+  <button data-section="dialogue">🎭 Dialogue & Interactions</button>
+  <button data-section="audio">🎙️ Voice & Music</button>
+  <button data-section="editor">🎞️ Scene Editor</button>
+  <button data-section="downloads">📥 Downloads & Exports</button>
+
+  <div class="sidebar-section">PROJECTS</div>
+  <button data-section="new-project">➕ New Project</button>
+  <button data-section="settings">⚙️ Settings</button>
+</nav>
+<!-- END SIDEBAR MENU -->
 <div class="app">
 
 <header>
@@ -1326,6 +1456,40 @@ footer {
   });
 
 })();
+  // SIDEBAR OPEN AND CLOSE
+const sidebarToggle = document.getElementById("sidebarToggle");
+const sidebarBackdrop = document.getElementById("sidebarBackdrop");
+const sidebar = document.getElementById("sidebar");
+
+if (sidebarToggle && sidebarBackdrop && sidebar) {
+  sidebarToggle.addEventListener("click", function () {
+    document.body.classList.toggle("sidebar-open");
+  });
+
+  sidebarBackdrop.addEventListener("click", function () {
+    document.body.classList.remove("sidebar-open");
+  });
+
+  document.addEventListener("keydown", function (event) {
+    if (event.key === "Escape") {
+      document.body.classList.remove("sidebar-open");
+    }
+  });
+
+  document.querySelectorAll("#sidebar button[data-section]").forEach(function (button) {
+    button.addEventListener("click", function () {
+      document.querySelectorAll("#sidebar button[data-section]").forEach(function (item) {
+        item.classList.remove("active");
+      });
+
+      button.classList.add("active");
+
+      if (window.innerWidth < 900) {
+        document.body.classList.remove("sidebar-open");
+      }
+    });
+  });
+  }
 </script>
 
 </body>
