@@ -1490,6 +1490,45 @@ if (sidebarToggle && sidebarBackdrop && sidebar) {
     });
   });
   }
+  // CONNECT SIDEBAR MENU TO EXISTING APP SECTIONS
+(function () {
+  const menuTargets = {
+    "home": null,
+    "story": 0,
+    "characters": 2,
+    "visuals": 1,
+    "funny": 1,
+    "magic": 1,
+    "dialogue": 2,
+    "audio": 2,
+    "editor": 5,
+    "downloads": 5,
+    "new-project": 0,
+    "settings": 3
+  };
+
+  const sections = document.querySelectorAll(".app > section.panel");
+
+  document.querySelectorAll("#sidebar button[data-section]").forEach(function (button) {
+    button.addEventListener("click", function () {
+      const target = button.dataset.section;
+
+      if (target === "home") {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+        return;
+      }
+
+      const index = menuTargets[target];
+
+      if (typeof index === "number" && sections[index]) {
+        sections[index].scrollIntoView({
+          behavior: "smooth",
+          block: "start"
+        });
+      }
+    });
+  });
+})();
 </script>
 
 </body>
