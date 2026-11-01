@@ -367,8 +367,12 @@ footer {
   <h1>🎬 My AI Video Maker</h1>
   <p>Dream up a story. Build a world. Create something unforgettable.</p>
 </header>
-
-<section class="panel">
+<section class="panel page-section" id="home">
+  <h2>🏠 Welcome to My AI Video Maker!</h2>
+  <p>Your personal creative studio. Choose a tool from the menu to start creating.</p>
+  <p>You can create stories, design characters, plan scenes, and prepare your videos.</p>
+</section>
+<section class="panel page-section" id="story">
   <h2>✍️ 1. Your Story</h2>
 
   <label for="idea">What is your video about?</label>
@@ -452,8 +456,8 @@ footer {
   </div>
 </section>
 
-<section class="panel">
-  <h2>🎭 2. Creativity Controls</h2>
+<section class="panel page-section" id="visuals">
+  <h2>🎨 Visual Styles</h2>
 
   <div class="grid">
     <div>
@@ -481,7 +485,12 @@ footer {
         <option selected>Mixed</option>
       </select>
     </div>
+</div>
+</section>
 
+<section class="panel page-section" id="funny">
+  <h2>😂 Funny Scenes</h2>
+  <div class="grid">
     <div>
       <label for="funny">Funny moments 😂</label>
       <select id="funny">
@@ -492,7 +501,12 @@ footer {
         <option>Wild and Unexpected</option>
       </select>
     </div>
+</div>
+</section>
 
+<section class="panel page-section" id="magic">
+  <h2>✨ Magic & Fantasy</h2>
+  <div class="grid">
     <div>
       <label for="magic">Magic and fantasy ✨</label>
       <select id="magic">
@@ -503,7 +517,12 @@ footer {
         <option>Wild Magic</option>
       </select>
     </div>
+</div>
+</section>
 
+<section class="panel page-section" id="dialogue">
+  <h2>🎭 Dialogue & Interactions</h2>
+  <div class="grid">
     <div>
       <label for="dialogue">Character dialogue</label>
       <select id="dialogue">
@@ -592,7 +611,7 @@ footer {
   </div>
 </section>
 
-<section class="panel">
+<section class="panel page-section" id="characters">
   <h2>🧒 3. Characters and Voices</h2>
 
   <div class="grid">
@@ -626,7 +645,12 @@ footer {
       <label for="characterDescription">Main character's appearance</label>
       <input id="characterDescription" value="7-year-old dark-skinned girl, two puff ponytails, yellow dress, red shoes, blue backpack">
     </div>
+</div>
+</section>
 
+<section class="panel page-section" id="audio">
+  <h2>🎙️ Voice & Music</h2>
+  <div class="grid">
     <div>
       <label for="voice">Voice arrangement</label>
       <select id="voice">
@@ -674,8 +698,7 @@ footer {
   </div>
 </section>
 
-<section class="panel">
-  <h2>📱 4. Video Settings</h2>
+<section class="panel page-section" id="settings">
 
   <div class="grid">
     <div>
@@ -725,8 +748,7 @@ footer {
   </p>
 </section>
 
-<section class="panel">
-  <h2>🚀 5. Create Your Story</h2>
+<section class="panel page-section" id="new-project">
 
   <button class="primary full" id="generate">✨ GENERATE STORY SCENES</button>
   <button class="secondary full" id="save">💾 SAVE PROJECT SETTINGS</button>
@@ -735,8 +757,7 @@ footer {
   <div id="status" role="status" aria-live="polite"></div>
 </section>
 
-<section class="panel">
-  <h2>🎞️ 6. Your Scene Plan</h2>
+<section class="panel page-section" id="editor">
 
   <div class="stats">
     <div class="stat">
@@ -752,7 +773,10 @@ footer {
       <span>DIALOGUE SCENES</span>
     </div>
   </div>
+</section>
 
+<section class="panel page-section" id="downloads">
+  <h2>📥 Downloads & Exports</h2>
   <button class="secondary" id="copy">📋 COPY SCENES</button>
   <button class="secondary" id="download">⬇️ DOWNLOAD SCENES</button>
   <button class="secondary" id="downloadJson">📦 EXPORT PROJECT JSON</button>
@@ -1490,45 +1514,44 @@ if (sidebarToggle && sidebarBackdrop && sidebar) {
     });
   });
   }
-  // CONNECT SIDEBAR MENU TO EXISTING APP SECTIONS
+  
+// CONNECT SIDEBAR MENU TO SEPARATE PAGES
 (function () {
-  const menuTargets = {
-    "home": null,
-    "story": 0,
-    "characters": 2,
-    "visuals": 1,
-    "funny": 1,
-    "magic": 1,
-    "dialogue": 2,
-    "audio": 2,
-    "editor": 5,
-    "downloads": 5,
-    "new-project": 0,
-    "settings": 3
-  };
+  const pages = document.querySelectorAll(".page-section");
+  const menuButtons = document.querySelectorAll("#sidebar button[data-section]");
 
-  const sections = document.querySelectorAll(".app > section.panel");
+  function showPage(pageId) {
+    pages.forEach(function (page) {
+      page.classList.remove("active");
+    });
 
-  document.querySelectorAll("#sidebar button[data-section]").forEach(function (button) {
+    const selectedPage = document.getElementById(pageId);
+
+    if (selectedPage) {
+      selectedPage.classList.add("active");
+    }
+
+    menuButtons.forEach(function (button) {
+      button.classList.toggle("active", button.dataset.section === pageId);
+    });
+  }
+
+  menuButtons.forEach(function (button) {
     button.addEventListener("click", function () {
-      const target = button.dataset.section;
-
-      if (target === "home") {
-        window.scrollTo({ top: 0, behavior: "smooth" });
-        return;
-      }
-
-      const index = menuTargets[target];
-
-      if (typeof index === "number" && sections[index]) {
-        sections[index].scrollIntoView({
-          behavior: "smooth",
-          block: "start"
-        });
-      }
+      showPage(button.dataset.section);
     });
   });
+
+  showPage("home");
 })();
+  /* SEPARATE APP PAGES */
+.page-section {
+  display: none;
+}
+
+.page-section.active {
+  display: block;
+  }
 </script>
 
 </body>
